@@ -27,7 +27,7 @@ const ChatInterface: React.FC = () => {
       </div> : 
       <QuickChats onQuickChatSelect={handleQuickChatSelect} />
     }
-    <div className='fixed bottom-0 w-[70%]'>
+    <div className='fixed bottom-0 w-[75%]'>
         <ChatInput onSendMessage={handleSendMessage} />
     </div>
     </div>

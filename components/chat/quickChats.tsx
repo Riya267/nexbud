@@ -15,15 +15,15 @@ const QuickChats: React.FC<QuickChatsProps> = ({ onQuickChatSelect }) => {
   ];
 
   return (
-    <div className="p-4 rounded-t-lg">
+    <div className="p-4 rounded-t-lg h-[28.125rem] lg:h-auto overflow-y-auto">
       <ul className="flex flex-wrap space-x-2 justify-center items-center">
         {quickChats.map((chat, index) => (
           <li key={index} className="mb-2">
             <div
-              className="border border-orange-500 rounded-lg p-4 bg-white shadow-md hover:shadow-lg cursor-pointer transition"
+              className="border border-orange-500 rounded-lg p-2 lg:p-4 bg-white shadow-md hover:shadow-lg cursor-pointer transition"
               onClick={() => onQuickChatSelect(chat)}
             >
-              <h3 className="text-lg text-gray-800 font-bold mb-2">{chat}</h3>
+              <h3 className="text-lg text-gray-800 font-bold mb-2 text-center">{chat}</h3>
             </div>
           </li>
         ))}
