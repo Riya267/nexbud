@@ -1,6 +1,7 @@
 'use client';
 
 import Sidebar from "@/components/sidebar";
+import AppWalletProvider from "@/components/AppWalletProvider";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -16,9 +17,11 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex font-nunitoSans">
-       <Sidebar />
-      {children}
-    </div>
+    <AppWalletProvider>
+        <div className="flex font-nunitoSans">
+          <Sidebar />
+          {children}
+        </div>
+    </AppWalletProvider>
   );
 }

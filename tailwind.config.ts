@@ -13,6 +13,7 @@ const config: Config = {
         'mid-purple': '#1c0522',
         'pinkish': '#260112',
         'blueish': '#0e0b1f',
+        'theme-background': '#171920'
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -20,14 +20,14 @@ const ChatInterface: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center bg-slate-950">
+    <div className="flex flex-col h-screen justify-center items-center bg-theme-background">
     {messages.length > 0 ? 
       <div className="flex-grow overflow-hidden">
         <Messages messages={messages} />
       </div> : 
       <QuickChats onQuickChatSelect={handleQuickChatSelect} />
     }
-    <div className='fixed bottom-0 w-[75%]'>
+    <div className='fixed bottom-0 w-[75%] lg:w-[70%]'>
         <ChatInput onSendMessage={handleSendMessage} />
     </div>
     </div>

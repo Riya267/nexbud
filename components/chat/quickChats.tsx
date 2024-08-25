@@ -1,4 +1,5 @@
 import React from "react";
+import { FaWallet, FaHistory, FaCoins, FaHandshake, FaChartLine } from "react-icons/fa";
 
 interface QuickChatsProps {
   onQuickChatSelect: (chat: string) => void;
@@ -6,24 +7,49 @@ interface QuickChatsProps {
 
 const QuickChats: React.FC<QuickChatsProps> = ({ onQuickChatSelect }) => {
   const quickChats = [
-    "Check my Ethereum balance",
-    "What's the latest in Web3?",
-    "Connect to Solana wallet",
-    "Show my transaction history",
-    "Get the latest token prices",
-    "Guide me through a transaction",
+    {
+      label: "Check my Solana balance",
+      icon: <FaWallet className="text-green-500" />,
+      description: "View your current Solana balance.",
+    },
+    {
+      label: "What's the latest in Web3?",
+      icon: <FaChartLine className="text-orange-500" />,
+      description: "Get updates on the latest trends in Web3.",
+    },
+    {
+      label: "Show my transaction history",
+      icon: <FaHistory className="text-blue-500" />,
+      description: "See all recent transactions in your wallet.",
+    },
+    {
+      label: "Get the latest token prices",
+      icon: <FaCoins className="text-rose-500" />,
+      description: "Check current prices of popular tokens.",
+    },
+    {
+      label: "Guide me through a transaction",
+      icon: <FaHandshake className="text-pink-500" />,
+      description: "Step-by-step guide to make a transaction.",
+    },
   ];
 
   return (
-    <div className="p-4 rounded-t-lg h-[28.125rem] lg:h-auto overflow-y-auto">
+    <div className="p-4 rounded-t-lg h-[28.125rem] lg:w-[70%] lg:h-auto overflow-y-auto">
       <ul className="flex flex-wrap space-x-2 justify-center items-center">
         {quickChats.map((chat, index) => (
-          <li key={index} className="mb-2">
+          <li key={index} className="mb-2 w-fit">
             <div
-              className="border border-orange-500 rounded-lg p-2 lg:p-4 bg-white shadow-md hover:shadow-lg cursor-pointer transition"
-              onClick={() => onQuickChatSelect(chat)}
+              className="border border-black rounded-lg p-4 bg-gray-800 shadow-md hover:shadow-lg cursor-pointer transition"
+              onClick={() => onQuickChatSelect(chat.label)}
             >
-              <h3 className="text-lg text-gray-800 font-bold mb-2 text-center">{chat}</h3>
+              <div className="flex items-center space-x-4">
+                {chat.icon}
+                <div>
+                  <h3 className="text-md text-white font-bold">{chat.label}</h3>
+                  <p className="text-xs text-gray-600">{chat.description}</p>
+                </div>
+              </div>
             </div>
           </li>
         ))}
