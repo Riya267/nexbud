@@ -1,26 +1,25 @@
-import GoogleProvider from 'next-auth/providers/google';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaClient } from '@prisma/client';
-import { SessionStrategy } from 'next-auth';
-import bcrypt from 'bcryptjs';
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 export const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.CLIENT_ID ?? '',
-      clientSecret: process.env.CLIENT_SECRET ?? '',
+      clientId: process.env.CLIENT_ID ?? "",
+      clientSecret: process.env.CLIENT_SECRET ?? "",
     }),
     CredentialsProvider({
-      name: 'Email and Password',
+      name: "Email and Password",
       credentials: {
-        email: { label: 'Email', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Please provide both email and password');
+          throw new Error("Please provide both email and password");
         }
 
         const user = await prisma.user.findUnique({
@@ -28,16 +27,16 @@ export const authOptions = {
         });
 
         if (!user) {
-          throw new Error('No user found with this email');
+          throw new Error("No user found with this email");
         }
-        
+
         const isValidPassword = await bcrypt.compare(
           credentials.password,
-          user.password || ''
+          user.password || ""
         );
 
         if (!isValidPassword) {
-          throw new Error('Invalid password');
+          throw new Error("Invalid password");
         }
 
         return user;
@@ -46,7 +45,8 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: 'jwt' as SessionStrategy,
+    strategy: "jwt",
+    maxAge: 4 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }: any) {

@@ -3,17 +3,8 @@
 import AuthForm from '@/components/auth';
 import React from 'react';
 import Image from "next/image";
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 const WelcomeScreen: React.FC = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  if (session?.user) {
-    router.push("/dashboard");
-  }
-
   return (
     <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen bg-gray-950 text-white">
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8">
@@ -23,7 +14,6 @@ const WelcomeScreen: React.FC = () => {
             alt="Logo"
             width={80}
             height={50}
-            objectFit="cover"
             className="rounded-full"
           />
         </div>

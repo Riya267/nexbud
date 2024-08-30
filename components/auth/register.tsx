@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AuthFormInterface } from "@/components/auth/login";
 import LoginWithGoogleButton from "@/components/loginWithGoogle";
@@ -20,12 +20,24 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
     watch,
     formState: { errors },
   } = useForm<RegisterFormInputs>();
+  
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
-    console.log(data);
+    setLoading(true);
     try {
       const { email, password, phone, username: name } = data;
       const hashedPassword = await bcrypt.hash(password, 10);
+      
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      });
+  
+      if (existingUser) {
+        alert("Email already in use. Please choose a different email.");
+        return;
+      }
+  
       await prisma.user.create({
         data: {
           email,
@@ -34,15 +46,22 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
           phone,
         },
       });
+  
+      alert("Registration successful! Please log in.");
+  
     } catch (error) {
-      console.error("user not registered");
+      console.error("Error registering user:", error);
+      alert("An error occurred while registering. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   const password = watch("password");
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-950">
+    <div className="flex items-center justify-center h-screen bg-gray-950 text-gray-950">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6 text-dark-purple">
           Create an Account
@@ -136,9 +155,14 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
           </div>
           <button
             type="submit"
-            className="w-full py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition mb-4"
+            className={`w-full py-3 rounded-lg transition mb-4 ${
+              loading
+                ? "bg-gray-600 text-white cursor-not-allowed"
+                : "bg-black text-white hover:bg-gray-800"
+            }`}
+            disabled={loading}
           >
-            Sign Up
+            {loading ? "Submitting..." : "Sign Up"}
           </button>
         </form>
         <div className="text-center text-gray-500 mb-4">Or</div>
@@ -146,12 +170,12 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
         <div className="text-center mt-6">
           <p className="text-gray-500">
             Already have an account?{" "}
-            <a
+            <button
               onClick={toggleAuthForm}
               className="text-black font-semibold hover:underline cursor-pointer"
             >
               Sign in
-            </a>
+            </button>
           </p>
         </div>
       </div>

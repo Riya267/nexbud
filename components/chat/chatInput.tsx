@@ -1,33 +1,31 @@
+import { ChatInputProps } from '@/types';
 import React, { useState } from 'react';
-interface ChatInputProps {
-  onSendMessage: (message: string) => void;
-}
+import { MdSend } from "react-icons/md";
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   const [input, setInput] = useState<string>('');
   
   const handleSend = () => {
+    console.log("tessstttt")
     if (input.trim() !== '') {
-      onSendMessage(input);
+      onSendMessage({ text: input, sender: "user"});
       setInput('');
     }
   };
 
   return (
-    <div className="p-4 lg:p-0 lg:py-4 bg-theme-background flex flex-col lg:flex-row justify-center items-center">
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        className="flex-grow p-4 text-gray-900 border border-gray-300 rounded-lg focus:outline-none mb-4 lg:mb-0"
-        placeholder="Type your message..."
-      />
-      <button
-        onClick={handleSend}
-        className="ml-0 lg:ml-4 border border-gray-400 bg-neutral-950 text-white text-md font-bold px-10 py-4 rounded-full hover:from-purple-600 hover:to-pink-600 transition"
-      >
-       Ask
-      </button>
+    <div className="lg:p-0 lg:py-1 bg-theme-background flex flex-col flex-wrap lg:flex-row justify-center items-center w-[70%]">
+      <div className='bg-white w-full flex mx-2 py-2 rounded-lg px-2'>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          className="flex-grow text-gray-900 border border-gray-300 rounded-lg focus:outline-none w-full border-none"
+          placeholder="Type your message..."
+        />
+        <MdSend color='black' size={25} onClick={handleSend} className='cursor-pointer'/>
+        </div>
     </div>
   );
 };

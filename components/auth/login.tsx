@@ -23,7 +23,7 @@ const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-950 font-nunitoSans">
+    <div className="flex items-center justify-center h-screen bg-gray-950 font-nunitoSans text-gray-950">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-2 text-dark-purple">Welcome</h2>
         <p className="text-xl text-center mb-4 text-gray-400">Sign into your account</p>
@@ -72,7 +72,7 @@ const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
         <LoginWithGoogleButton />
         <div className="text-center mt-6">
           <p className="text-gray-500">
-            Don't have an account?{' '}
+            Dont have an account?{' '}
             <a onClick={toggleAuthForm} className="text-black font-semibold hover:underline cursor-pointer">
               Join us
             </a>
