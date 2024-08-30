@@ -1,11 +1,13 @@
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"; // Import PrismaAdapter
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 export const authOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.CLIENT_ID ?? "",
@@ -22,7 +24,7 @@ export const authOptions = {
           throw new Error("Please provide both email and password");
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user?.findUnique({
           where: { email: credentials.email },
         });
 
@@ -32,7 +34,7 @@ export const authOptions = {
 
         const isValidPassword = await bcrypt.compare(
           credentials.password,
-          user.password || ""
+          user.hashedPassword || ""
         );
 
         if (!isValidPassword) {

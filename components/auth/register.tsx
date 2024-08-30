@@ -8,7 +8,6 @@ import prisma from "@/db";
 interface RegisterFormInputs {
   username: string;
   email: string;
-  phone: string;
   password: string;
   confirmPassword: string;
 }
@@ -26,9 +25,9 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     setLoading(true);
     try {
-      const { email, password, phone, username: name } = data;
+      const { email, password, username: name } = data;
       const hashedPassword = await bcrypt.hash(password, 10);
-      
+      console.log("prisma", prisma)
       const existingUser = await prisma.user.findUnique({
         where: { email },
       });
@@ -38,15 +37,14 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
         return;
       }
   
-      await prisma.user.create({
+      const userCreated = await prisma.user.create({
         data: {
           email,
-          password: hashedPassword,
+          hashedPassword,
           name,
-          phone,
         },
       });
-  
+      console.log("user created", userCreated)
       alert("Registration successful! Please log in.");
   
     } catch (error) {
@@ -96,24 +94,6 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="mb-4">
-            <input
-              {...register("phone", {
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Invalid phone number",
-                },
-              })}
-              type="text"
-              placeholder="Enter phone number"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.phone.message}
               </p>
             )}
           </div>

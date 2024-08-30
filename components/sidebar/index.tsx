@@ -89,7 +89,6 @@ const Sidebar: React.FC = () => {
         className="flex items-center justify-center space-x-2 cursor-pointer p-4 hover:bg-gray-700 rounded-md"
         onClick={async () => {
           await signOut()
-          
         }}
       >
         <FiLogOut className="text-xl" />
