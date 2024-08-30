@@ -79,13 +79,13 @@ const ChatInterface: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-theme-background w-full">
-      <div className='flex justify-center items-center h-5/6 w-[70%] lg:max-w-[1024px]'>
+      <div className='flex justify-center items-center h-5/6 w-auto lg:w-[70%] lg:max-w-[1024px]'>
         {messages.length > 0 ? 
           <Messages messages={messages} loading={loading}/> :
           <QuickChats onQuickChatSelect={handleSendMessage} />
         }
       </div>
-      <div className='w-full p-4 flex justify-center mt-2'>
+      <div className='w-full lg:p-4 flex justify-center mt-2'>
         <ChatInput onSendMessage={handleSendMessage} />
       </div>
     </div>

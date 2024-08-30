@@ -1,5 +1,3 @@
-'use client';
-
 import AuthForm from '@/components/auth';
 import React from 'react';
 import Image from "next/image";
