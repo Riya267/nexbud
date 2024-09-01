@@ -7,7 +7,6 @@ export const scrollToBottom = (id: string) => {
 
 export const sendQueryToAIAgent = (query: string, messageLength: number) => {
     try {
-      console.log("callCount:", messageLength);
 
       if (messageLength === 1) {
         // First response

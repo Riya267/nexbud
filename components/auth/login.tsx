@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import LoginWithGoogleButton from '@/components/loginWithGoogle';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,7 @@ interface LoginFormInputs {
 
 const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   
   const {
     register,
@@ -23,6 +24,7 @@ const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
   } = useForm<LoginFormInputs>();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    setIsLoading(true)
     try {
       const { email, password } = data;
       const result = await signIn("credentials", {
@@ -30,9 +32,9 @@ const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
         email,
         password,
       });
-
+      setIsLoading(false)
       if (!result?.error) {
-        toast("Login successful!", {
+        toast("You are Loggedin!!!!!", {
           icon: '👍🏻',
           style: {
             borderRadius: '10px',
@@ -52,6 +54,7 @@ const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
         });
       }
     } catch (error) {
+      setIsLoading(false)
       console.error('An error occurred:', error);
       toast("Something went wrong while Logging in.", {
         icon: '👎🏻',
@@ -107,7 +110,7 @@ const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
           <input
             type="submit"
             className="w-full py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition mb-4"
-            value="Continue"
+            value={`${isLoading ? 'Loading...' : 'Continue'}`}
           />
         </form>
         <div className="text-center text-gray-500 mb-4">Or</div>

@@ -26,7 +26,6 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
     setLoading(true);
     try {
       const { email, password, username: name } = data;
-      console.log("prisma", prisma)
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -34,7 +33,6 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
         },
         body: JSON.stringify({ email, password, name }),
       });
-      console.log("response", response)
       if(response.ok) {
         toast("Registration successful! Please log in.", {
           icon: '👍🏻',

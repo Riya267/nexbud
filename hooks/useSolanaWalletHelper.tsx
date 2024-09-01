@@ -17,7 +17,6 @@ export const useSolanaWalletHelper = (): WalletHelperHookProps => {
 
   useEffect(() => {
     if( walletHelper){
-      console.log("Registering tools...");
       registerTool(
         "web_wallet_get_public_key_tool",
         walletHelper.getPublicKey.bind(walletHelper),
@@ -34,7 +33,6 @@ export const useSolanaWalletHelper = (): WalletHelperHookProps => {
         "Signature"
       );
     }
-    console.log("RegisteredTools", toolMapping);
   }, [walletHelper]);
 
   return {

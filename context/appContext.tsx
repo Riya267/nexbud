@@ -29,7 +29,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     if (!toolRegisteredRef.current) {
       registerTool("notify_user_onchat_tool", (message: string) => {
-        console.log("debug 2", message);
         setMessages((prevMessages) => [
           ...prevMessages,
           {

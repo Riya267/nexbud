@@ -22,41 +22,32 @@ async function aiAgentAndToolMapping({
   setMessages,
 }: AiAgentAndToolMappingProps) {
   try {
-    console.log("Starting aiAgentAndToolMapping function...");
     setLoading(true);
 
     if (messages[messages.length - 1]?.sender === "user") {
-      console.log("Last message sender is user. Proceeding with AI query...");
 
       const userMessageCount = messages.filter((item) => item.sender === "user").length;
-      console.log(`Number of user messages: ${userMessageCount}`);
 
       const aiResponse = await sendQueryToAIAgent(
         messages[messages.length - 1].text,
         userMessageCount
       );
-      console.log("AI response received:", aiResponse);
 
       let context = {};
       for (const item of aiResponse!) {
-        console.log(`Processing tool: ${item.tool}`);
         const mappedItem = toolMapping.find(
           (toolMap) => toolMap.tool === item.tool
         );
 
         if (mappedItem) {
-          console.log(`Found mapped function for tool: ${item.tool}`);
 
           if (item.tool !== "notify_user_onchat_tool") {
-            console.log(`Executing function for tool: ${item.tool} with arguments:`, item.arguments);
             const response = await mappedItem.function({ ...item.arguments });
-            console.log(`Response received from tool function: ${response}`);
 
             context = {
               ...context,
               ...{ [`${mappedItem?.context}`]: `${response}` },
             };
-            console.log("Updated context:", context);
 
             if (!response) {
               console.error("Error: Unable to process request - Response is null or undefined");
@@ -64,23 +55,16 @@ async function aiAgentAndToolMapping({
             }
 
           } else {
-            console.log("Executing notify_user_onchat_tool with message and context:", item.arguments?.message, context);
             await mappedItem.function(
               `${item.arguments?.message}` + `${JSON.stringify(context)}`
             );
           }
-        } else {
-          console.log(`No mapped function found for tool: ${item.tool}`);
         }
       }
-    } else {
-      console.log("Last message sender is not a user. No AI query needed.");
     }
-
-    console.log("Finished processing AI response.");
     setLoading(false);
   } catch (error) {
-    console.error("Error in aiAgentAndToolMapping:", error);
+    console.error("Error in AiAgentAndToolMapping:", error);
     setMessages([
       ...messages,
       {
@@ -98,11 +82,9 @@ const ChatInterface: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("Wallet connected:", wallet?.connected);
 
     let timer = setTimeout(() => {
       if (wallet?.connected) {
-        console.log("Starting AI tool mapping call");
         aiAgentAndToolMapping({ setLoading, messages, setMessages });
       }
     }, 1500);

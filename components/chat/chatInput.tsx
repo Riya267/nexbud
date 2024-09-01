@@ -6,7 +6,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   const [input, setInput] = useState<string>('');
   
   const handleSend = () => {
-    console.log("tessstttt")
     if (input.trim() !== '') {
       onSendMessage({ text: input, sender: "user"});
       setInput('');

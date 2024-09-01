@@ -13,7 +13,6 @@ export default class SolanaWalletHelper {
 
   public getPublicKey(): PublicKey | null {
     if (this.wallet.connected) {
-      console.log("publickey", this.wallet.publicKey)
       return this.wallet.publicKey ?? null;
     }
     toast("Please Connect Your Wallet", {
@@ -44,7 +43,6 @@ export default class SolanaWalletHelper {
     destinationAddress,
     amount}: { destinationAddress: string; amount: number}
   ): Promise<string | null> {
-    console.log("sendCrypto", destinationAddress, amount);
     try {
       if (!this.wallet.publicKey || !this.wallet.connected) {
         throw new Error("Wallet not connected");
@@ -58,12 +56,9 @@ export default class SolanaWalletHelper {
         })
       );
 
-      console.log("Sending transaction:", transaction);
       const signature = await this.wallet.sendTransaction(transaction, this.connection);
-      console.log("Transaction sent, awaiting confirmation:", signature);
 
-      const confirmation = await this.connection.confirmTransaction(signature, "processed");
-      console.log("Transaction confirmation:", confirmation);
+      await this.connection.confirmTransaction(signature, "processed");
       
       return signature;
     } catch (error) {
