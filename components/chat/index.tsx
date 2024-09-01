@@ -7,7 +7,7 @@ import ChatInput from '@/components/chat/chatInput';
 import { useAppContext } from '@/context/appContext';
 import { MessageProp } from '@/types';
 import { useWalletService } from '@/hooks/useWalletService';
-import { sendQueryToAIAgent } from '@/utils/helper';
+import { sendQueryToAIAgent } from '@/services/aiService';
 import { toolMapping } from '@/utils/toolMapping';
 import toast from 'react-hot-toast';
 
@@ -29,10 +29,7 @@ async function aiAgentAndToolMapping({
 
       const userMessageCount = messages.filter((item) => item.sender === "user").length;
 
-      const aiResponse = await sendQueryToAIAgent(
-        messages[messages.length - 1].text,
-        userMessageCount
-      );
+      const aiResponse = await sendQueryToAIAgent(messages[messages.length - 1]?.text);
 
       let context = {};
       for (const item of aiResponse!) {
