@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AuthFormInterface } from "@/components/auth/login";
 import LoginWithGoogleButton from "@/components/loginWithGoogle";
-import bcrypt from "bcryptjs";
 import prisma from "@/db";
+import toast from "react-hot-toast";
 
 interface RegisterFormInputs {
   username: string;
@@ -26,30 +26,36 @@ const RegisterForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
     setLoading(true);
     try {
       const { email, password, username: name } = data;
-      const hashedPassword = await bcrypt.hash(password, 10);
       console.log("prisma", prisma)
-      const existingUser = await prisma.user.findUnique({
-        where: { email },
-      });
-  
-      if (existingUser) {
-        alert("Email already in use. Please choose a different email.");
-        return;
-      }
-  
-      const userCreated = await prisma.user.create({
-        data: {
-          email,
-          hashedPassword,
-          name,
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email, password, name }),
       });
-      console.log("user created", userCreated)
-      alert("Registration successful! Please log in.");
+      console.log("response", response)
+      if(response.ok) {
+        toast("Registration successful! Please log in.", {
+          icon: '👍🏻',
+          style: {
+            borderRadius: '10px',
+            background: '#058009',
+            color: '#ffffff',
+          },
+        })
+      }
   
     } catch (error) {
       console.error("Error registering user:", error);
-      alert("An error occurred while registering. Please try again.");
+      toast("Something went wrong while registering. Please try again.", {
+        icon: '👎🏻',
+        style: {
+          borderRadius: '10px',
+          background: '#ab210a',
+          color: '#ffffff',
+        },
+      });
     } finally {
       setLoading(false);
     }

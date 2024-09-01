@@ -5,40 +5,49 @@ import { usePathname } from 'next/navigation';
 import React, { useState, useMemo, useCallback } from 'react';
 import { FiHome, FiLogOut, FiBox, FiDollarSign, FiSettings } from 'react-icons/fi';
 import { LuPanelLeftOpen, LuPanelLeftClose } from 'react-icons/lu';
-import Image from 'next/image';
+
+const colors = [
+  'bg-red-500',
+  'bg-blue-500',
+  'bg-green-500',
+  'bg-yellow-500',
+  'bg-purple-500',
+  'bg-pink-500',
+  'bg-indigo-500',
+  'bg-teal-500',
+];
+
+
+function getRandomColor() {
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+}
+
 
 const Sidebar: React.FC = () => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const pathName = usePathname();
 
-  // Toggle sidebar state
   const toggleSidebar = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
 
-  // User profile component
   const userProfile = useMemo(() => {
     if (!session?.user) return null;
 
     return (
       <div className="flex items-center justify-center cursor-pointer rounded-full my-6">
-        <div className="rounded-full w-8">
-          <Image
-            className="w-full h-full rounded-full cursor-pointer"
-            src={session.user.image || ''}
-            width={100}
-            height={100}
-            alt="user_profile_image"
-            referrerPolicy="no-referrer"
-          />
+        <div className={`rounded-full ${getRandomColor()} px-4 py-2`}>
+          { session.user?.name?.charAt(0)}
         </div>
-        {isOpen && <span className="block px-4">{session.user.name}</span>}
+        {isOpen && <span className="px-4">
+           <span className="italic">Hi,</span> {session.user.name}
+          </span>}
       </div>
     );
   }, [session, isOpen]);
 
-  // Navigation items
   const navItems = useMemo(
     () => [
       { href: '/dashboard', icon: FiHome, label: 'Dashboard' },

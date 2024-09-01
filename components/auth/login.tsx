@@ -1,7 +1,9 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import LoginWithGoogleButton from '@/components/loginWithGoogle';
-
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import toast from 'react-hot-toast';
 export interface AuthFormInterface {
   toggleAuthForm: (e: React.SyntheticEvent) => void;
 }
@@ -12,16 +14,56 @@ interface LoginFormInputs {
 }
 
 const LoginForm: React.FC<AuthFormInterface> = ({ toggleAuthForm }) => {
+  const router = useRouter();
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log(data);
-  };
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const { email, password } = data;
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
 
+      if (!result?.error) {
+        toast("Login successful!", {
+          icon: '👍🏻',
+          style: {
+            borderRadius: '10px',
+            background: '#058009',
+            color: '#ffffff',
+          },
+        });
+        router.push("/dashboard")
+      } else {
+        toast("Something went wrong while Logging in.", {
+          icon: '👎🏻',
+          style: {
+            borderRadius: '10px',
+            background: '#ab210a',
+            color: '#ffffff',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      toast("Something went wrong while Logging in.", {
+        icon: '👎🏻',
+        style: {
+          borderRadius: '10px',
+          background: '#ab210a',
+          color: '#ffffff',
+        },
+      });
+    }
+  };
+  
   return (
     <div className="flex items-center justify-center h-screen bg-gray-950 font-nunitoSans text-gray-950">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
