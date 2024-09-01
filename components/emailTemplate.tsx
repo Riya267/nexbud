@@ -5,7 +5,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   message,
 }) => (
   <div>
-    <h1>Update From Web3Sage</h1>
+    <h1>Update From NexBud</h1>
     <p>{message}!</p>
   </div>
 );

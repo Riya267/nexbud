@@ -16,7 +16,7 @@ const WelcomeScreen: React.FC = () => {
           />
         </div>
         <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-center">
-          Welcome Back to <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">Web3Sage</span>
+          Welcome Back to <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">NexBud</span>
         </h2>
         <p className="text-base lg:text-lg text-center">
           Your Personal AI Assistant for all web3 needs
