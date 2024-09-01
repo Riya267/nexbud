@@ -7,8 +7,8 @@ import React, {
   useRef,
 } from "react";
 import { MessageProp } from "@/types";
-import { registerTool } from "@/lib/toolMapping";
-import { useSolanaWalletHelper } from "@/hooks/useSolanaWalletHelper";
+import { registerTool } from "@/utils/toolMapping";
+import { useWalletService } from "@/hooks/useWalletService";
 
 interface AppContextType {
   messages: MessageProp[];
@@ -21,7 +21,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { wallet } = useSolanaWalletHelper();
+  const { wallet } = useWalletService();
   const [messages, setMessages] = useState<MessageProp[]>([]);
   const [loading, setLoading] = useState(false);
   const toolRegisteredRef = useRef(false);

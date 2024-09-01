@@ -1,5 +1,5 @@
 import Sidebar from "@/components/sidebar";
-import AppWalletProvider from "@/components/AppWalletProvider";
+import WalletAdapterProvider from "@/context/WalletAdapterProvider";
 
 export default function DashboardLayout({
   children,
@@ -7,11 +7,11 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppWalletProvider>
+    <WalletAdapterProvider>
       <div className="flex font-nunitoSans">
         <Sidebar />
         {children}
       </div>
-    </AppWalletProvider>
+    </WalletAdapterProvider>
   );
 }

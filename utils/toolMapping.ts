@@ -1,4 +1,4 @@
-import sendEmail from "./sendEmail";
+import sendEmail from "../services/sendEmail";
 
 export const toolMapping: { tool: string; function: Function, context?: string }[] = [];
 

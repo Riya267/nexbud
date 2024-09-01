@@ -1,17 +1,17 @@
-import { registerTool, toolMapping } from "@/lib/toolMapping";
-import SolanaWalletHelper from "@/lib/walletsHelper";
+import { registerTool } from "@/utils/toolMapping";
+import WalletService from "@/services/walletService";
 import { WalletHelperHookProps } from "@/types";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, clusterApiUrl } from "@solana/web3.js";
 import { useEffect, useMemo } from "react";
 
-export const useSolanaWalletHelper = (): WalletHelperHookProps => {
+export const useWalletService = (): WalletHelperHookProps => {
   const wallet = useWallet() as any;
   const connection = useMemo(() => new Connection(clusterApiUrl("devnet")), []);
 
   const walletHelper = useMemo(() => {
     if(wallet.connected){
-      return new SolanaWalletHelper(wallet, connection);
+      return new WalletService(wallet, connection);
     }
   }, [wallet, connection]);
 

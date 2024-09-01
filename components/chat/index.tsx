@@ -6,9 +6,10 @@ import QuickChats from '@/components/chat/quickChats';
 import ChatInput from '@/components/chat/chatInput';
 import { useAppContext } from '@/context/appContext';
 import { MessageProp } from '@/types';
-import { useSolanaWalletHelper } from '@/hooks/useSolanaWalletHelper';
-import { sendQueryToAIAgent } from '@/lib/helper';
-import { toolMapping } from '@/lib/toolMapping';
+import { useWalletService } from '@/hooks/useWalletService';
+import { sendQueryToAIAgent } from '@/utils/helper';
+import { toolMapping } from '@/utils/toolMapping';
+import toast from 'react-hot-toast';
 
 interface AiAgentAndToolMappingProps {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,8 +56,15 @@ async function aiAgentAndToolMapping({
             }
 
           } else {
+            let updatedContext="";
+            for (const [key, value] of Object.entries(context)) {
+              // Capitalize the key and replace underscores with spaces for readability
+              const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+              updatedContext += `${formattedKey}: ${value}\n`;
+          }
+      
             await mappedItem.function(
-              `${item.arguments?.message}` + `${JSON.stringify(context)}`
+              `${item.arguments?.message}` + `${updatedContext}`
             );
           }
         }
@@ -77,21 +85,32 @@ async function aiAgentAndToolMapping({
 }
 
 const ChatInterface: React.FC = () => {
-  const { wallet, connection } = useSolanaWalletHelper();
+  const { wallet, connection } = useWalletService();
   const { messages, setMessages } = useAppContext();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-
-    let timer = setTimeout(() => {
-      if (wallet?.connected) {
-        aiAgentAndToolMapping({ setLoading, messages, setMessages });
+    if(wallet.connected) {
+      let timer = setTimeout(() => {
+          aiAgentAndToolMapping({ setLoading, messages, setMessages });
+      }, 1500);
+  
+      return () => {
+        clearTimeout(timer);
+      };
+    } else {
+      if(messages[messages.length - 1]?.sender === "user"){
+        toast("Please Connect Your Wallet", {
+          icon: '🌐',
+          style: {
+            borderRadius: '10px',
+            background: '#313042',
+            color: '#ffffff',
+          },
+        })
+        handleSendMessage({text: "Please Connect Your Wallet", sender:"bot"})
       }
-    }, 1500);
-
-    return () => {
-      clearTimeout(timer);
-    };
+    }
   }, [wallet, connection, messages]);
 
   const handleSendMessage = (message: MessageProp) => {
@@ -100,7 +119,7 @@ const ChatInterface: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-theme-background w-full">
-      <div className='flex justify-center items-center h-5/6 w-auto lg:w-[70%] lg:max-w-[1024px]'>
+      <div className='flex justify-center items-center h-5/6 w-auto w-full'>
         {messages.length > 0 ? 
           <Messages messages={messages} loading={loading} /> :
           <QuickChats onQuickChatSelect={handleSendMessage} />

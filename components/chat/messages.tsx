@@ -1,4 +1,4 @@
-import { scrollToBottom } from "@/lib/helper";
+import { scrollToBottom } from "@/utils/helper";
 import { MessageProp, MessagesProps } from "@/types";
 import React, { useEffect } from "react";
 import { ThreeDots } from "react-loader-spinner";
@@ -23,8 +23,8 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
    if(messages.length > 0) scrollToBottom("messages-container")
   },[messages])
   return (
-    <div id="messages-container" className="p-2 lg:p-8 rounded-t-lg h-full max-h-[90%] scrollbar-thumb-slate-800 scrollbar-track-slate-900 scrollbar-thin overflow-y-auto mt-[6rem] w-full min-w-[70vw]">
-      <ul className="flex flex-col justify-center items-center w-[15rem] md:w-full">
+    <div id="messages-container" className="p-2 lg:p-8 rounded-t-lg h-full max-h-[90%] overflow-y-auto mt-[6rem] w-full min-w-[70vw] scrollbar-thumb-slate-800 scrollbar-track-slate-900 scrollbar-thin">
+      <ul className="flex flex-col justify-center items-center w-full">
         {messages.map((msg, index) => (
           <li
             key={index}

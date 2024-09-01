@@ -10,7 +10,7 @@ export const aiResponse1: ToolAction[] = [
     tool: "notify_user_onchat_tool",
     description: "Notify the user via chat",
     arguments: {
-      message: "This is your public key: ",
+      message: "Success!! ",
     },
   },
 ];
@@ -25,7 +25,7 @@ export const aiResponse2: ToolAction[] = [
     tool: "notify_user_onchat_tool",
     description: "Notify the user via chat",
     arguments: {
-      message: "Your Wallet Balance is: ",
+      message: "Success!!! ",
     },
   },
 ];
@@ -45,17 +45,12 @@ export const aiResponse3: ToolAction[] = [
     tool: "notify_user_onchat_tool",
     description: "Notify the user via chat",
     arguments: {
-      message: "This is your Public key and Wallet Balance: ",
+      message: "Your information: ",
     },
   },
 ];
 
 export const aiResponse4: ToolAction[] = [
-  {
-    tool: "web_wallet_get_public_key_tool",
-    description: "get your public key",
-    arguments: null,
-  },
   {
     tool: "web_wallet_send_money_tool",
     description: "send money to an public key xxx",
