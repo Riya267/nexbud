@@ -1,14 +1,13 @@
-import { registerTool } from "@/utils/toolMapping";
+import { registerTool, toolMapping } from "@/utils/toolMapping";
 import WalletService from "@/services/walletService";
 import { WalletHelperHookProps } from "@/types";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletContextState, useWallet } from "@solana/wallet-adapter-react";
 import { Connection, clusterApiUrl } from "@solana/web3.js";
 import { useEffect, useMemo } from "react";
 
 export const useWalletService = (): WalletHelperHookProps => {
   const wallet = useWallet() as any;
   const connection = useMemo(() => new Connection(clusterApiUrl("devnet")), []);
-
   const walletHelper = useMemo(() => {
     if(wallet.connected){
       return new WalletService(wallet, connection);
@@ -32,7 +31,13 @@ export const useWalletService = (): WalletHelperHookProps => {
         walletHelper.sendCrypto.bind(walletHelper),
         "Signature"
       );
+      registerTool(
+        "web_wallet_get_transactions_tool",
+        walletHelper.getTransactions.bind(walletHelper),
+        "Transactions"
+      );
     }
+    console.log("Registered Tools", toolMapping)
   }, [walletHelper]);
 
   return {

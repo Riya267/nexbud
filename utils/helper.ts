@@ -1,4 +1,4 @@
-import { aiResponse1, aiResponse2, aiResponse3, aiResponse4 } from "@/output";
+import { aiResponse1, aiResponse2, aiResponse3, aiResponse4, aiResponse5 } from "@/output";
 
 export const scrollToBottom = (id: string) => {
   const container = document.getElementById(id)!;
@@ -20,6 +20,9 @@ export const sendQueryToAIAgent = (query: string, messageLength: number) => {
       } else if (messageLength === 4) {
         // Fourth response
         return aiResponse4;
+      } else if (messageLength === 5) {
+        // Fourth response
+        return aiResponse5;
       } else {
         // After 4 calls, return null
         return null;

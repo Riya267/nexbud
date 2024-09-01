@@ -23,6 +23,7 @@ export type ToolAction = {
         destinationAddress?: string; 
         amount?: number; 
         message?: string; 
+        limit?: number
     };
 };
 

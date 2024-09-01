@@ -67,3 +67,20 @@ export const aiResponse4: ToolAction[] = [
     },
   },
 ];
+
+export const aiResponse5: ToolAction[] = [
+  {
+    tool: "web_wallet_get_transactions_tool",
+    description: "Get Transactions for a wallet",
+    arguments: {
+      limit: 3
+    },
+  },
+  {
+    tool: "notify_user_onchat_tool",
+    description: "Notify the user via chat",
+    arguments: {
+      message: "Your Last 3 Transactions: ",
+    },
+  },
+];

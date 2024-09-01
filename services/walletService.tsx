@@ -1,4 +1,4 @@
-import { Connection, PublicKey, LAMPORTS_PER_SOL, Transaction, SystemProgram } from "@solana/web3.js";
+import { Connection, PublicKey, LAMPORTS_PER_SOL, Transaction, SystemProgram, ConfirmedSignatureInfo } from "@solana/web3.js";
 import { WalletAdapter } from "@solana/wallet-adapter-base";
 
 export default class SolanaWalletHelper {
@@ -29,6 +29,24 @@ export default class SolanaWalletHelper {
     }
     return null;
   }
+
+  public async getTransactions({limit}: { limit: number}): Promise<string[] | string> {
+    if (!this.wallet.publicKey) {
+        console.error("Wallet address is required");
+        return "";
+    }
+    try {
+      const signatures = await this.connection.getSignaturesForAddress(this.wallet.publicKey, {
+        limit: limit || 3
+      });
+      const transactions = await Promise.all(signatures.map(sig => sig.signature));
+      if(transactions.length > 0) return transactions.map((tran, index) => `Transaction ${index + 1}: ${tran}\n`).join('');
+      return "There are no transactions with current public key";
+    } catch (error) {
+        console.error("Failed to fetch transactions:", error);
+        return "";
+    }
+}
 
   public async sendCrypto({
     destinationAddress,

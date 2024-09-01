@@ -57,14 +57,14 @@ async function aiAgentAndToolMapping({
 
           } else {
             let updatedContext="";
+            console.log("context", context)
             for (const [key, value] of Object.entries(context)) {
-              // Capitalize the key and replace underscores with spaces for readability
               const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-              updatedContext += `${formattedKey}: ${value}\n`;
+              updatedContext += `\n${formattedKey}: ${value}\n`;
           }
       
             await mappedItem.function(
-              `${item.arguments?.message}` + `${updatedContext}`
+              `${item.arguments?.message}` + `\n${updatedContext}`
             );
           }
         }
@@ -119,7 +119,7 @@ const ChatInterface: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-theme-background w-full">
-      <div className='flex justify-center items-center h-5/6 w-auto w-full'>
+      <div className='flex justify-center items-center h-5/6 w-auto w-full lg:max-w-[1200px]'>
         {messages.length > 0 ? 
           <Messages messages={messages} loading={loading} /> :
           <QuickChats onQuickChatSelect={handleSendMessage} />
